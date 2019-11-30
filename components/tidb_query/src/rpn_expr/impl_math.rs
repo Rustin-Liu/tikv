@@ -303,6 +303,12 @@ fn tan(arg: &Option<Real>) -> Result<Option<Real>> {
 
 #[inline]
 #[rpn_fn]
+fn pow(arg: &Option<Real>) -> Result<Option<Real>> {
+    Ok(arg.map_or(None, |arg| Real::new(arg.pow()).ok()))
+}
+
+#[inline]
+#[rpn_fn]
 fn cot(arg: &Option<Real>) -> Result<Option<Real>> {
     match arg {
         Some(arg) => {
@@ -854,6 +860,22 @@ mod tests {
                 .evaluate(ScalarFuncSig::Cos)
                 .unwrap();
             assert!((output.unwrap().into_inner() - expect).abs() < std::f64::EPSILON);
+        }
+    }
+
+    #[test]
+    fn test_pow() {
+        let tests = vec![
+            (1.0, 3.0, 1.0),
+            (3.0, 0.0, 1.0),
+            (2.0, 4.0, 16.0),
+        ];
+        for (arg0, arg1, exp) in tests {
+            let output: Option<Real> = RpnFnScalarEvaluator::new()
+                .push_param(Some(Real::from(arg0, arg1)))
+                .evaluate(ScalarFuncSig::Pow)
+                .unwrap();
+            assert_eq!(output, exp);
         }
     }
 
