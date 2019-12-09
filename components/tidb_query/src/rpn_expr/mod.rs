@@ -422,6 +422,9 @@ fn map_expr_node_to_rpn_func(expr: &Expr) -> Result<RpnFnMeta> {
         ScalarFuncSig::RoundReal => round_real_fn_meta(),
         ScalarFuncSig::RoundInt => round_int_fn_meta(),
         ScalarFuncSig::RoundDec => round_dec_fn_meta(),
+        ScalarFuncSig::RoundWithFracReal => round_with_frac_real_fn_meta(),
+        ScalarFuncSig::RoundWithFracInt => round_with_frac_int_fn_meta(),
+        ScalarFuncSig::RoundWithFracDec => round_with_frac_dec_fn_meta(),
         _ => return Err(other_err!(
             "ScalarFunction {:?} is not supported in batch mode",
             value
